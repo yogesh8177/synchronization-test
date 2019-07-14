@@ -56,6 +56,11 @@ following rules:
 
 5. System time on the master and hand held are synchronized via timestamps
 
+# Steps to run
+
+1. Make sure you have nodejs installed on your system
+2. run `node index.js`
+
 # Algorithm
 
 ### Assuming that we have everything related to data in memory, the algorith for master computer us as follows:
