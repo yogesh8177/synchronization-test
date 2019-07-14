@@ -73,3 +73,13 @@ Above steps will give you the gist of the algorithm implemented. Code will clear
 We can go through the `doSync()` function in our `index.js` file.
 
 - Time plays a vital role in determining which change should be treated in what sequence! There might be a case where even though device `A` updated before device `B` could update, but device `A` was not connected to internet for a long time and during that time period, device `B` posted an update. Thus, now we have device `B` synced with our main server, but device `A` is not. Once internet resumes on device `A`, it attempts to sync data with our main server. And since our previous operation was done on device `A` instead of device `B`, while sync operation of `A` ins underway, we look at the timestamp on the main server and from the payload of device `A`. In this case, device `A` was first to make an update, but device `B` got its data synced before device `A` could sync with the main server! Thus, we then assume that device `A` update should be given first priority even though `B` has synced with main server. Thus, we apply the contention rules given above by making appropriate change in operation sequences using timestamps.
+
+> Note: Here we assume that time is synced with all the servers and there is no discrepancy in the time properties.
+
+## Approach and thought process
+
+1. As given in the problem statement, we have rules that define how to handle different sequences of operations.
+2. Other design considerations shall be based on the devices being used. What shall be the best time sync interval so as to avoid battery drain and using a light weight protocol for small data footprint.
+3. The code written takes into account multiple users having multiple devices. Each device periodically will sync data (Pull vs Push) based on the conditions and rules given above.
+4. For case where there are not so many users, Object and arrays will help our cause. But when list gets big, it will need a good approach so as to make our search and update operations more efficient. Mostly the search operation can be improved by compromising some other paramenters like memory usage. Instead of using array of objects, we can use Map of Map. This will definitely increase our memory overhead, but will help in faster reads and corresponding updates.
+5. Utilizing name as primary key will create issues where there can be two different individuals with same name. Here our approach of choosing `name` as `Primary Key` will fail. Also if we intend to extend our features, and name acts as a foreign key in other models, then it will be a huge pain.
