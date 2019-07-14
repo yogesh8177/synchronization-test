@@ -46,3 +46,30 @@ i. D + D (not possible)
 
 # Algorithm
 
+### Assuming that we have everything related to data in memory, the algorith for master computer us as follows:
+
+1. Fetch handheld device input.
+2. Search for the contact in the input payload in our primary DB (masterRecord in this case)
+3. If we have such a record on our master server, the any of the following will happen:
+  - Fetch previous `PO` operation that was performed with the lastModified timestamp.
+  - Lets consider current operation to perform be denoted by `CO`
+  - Key notations: C - Create, U - Update, D - Delete, E - Empty or no operation, N - No Change
+     ```
+      PO = fetchPreviousOperation(userId, contactName);
+
+      if (PO == 'E' && CO == 'C') then
+        createContact(userId, contactPayload);
+      else if (PO == 'C' && CO == 'C') then
+        C + C (not possible)
+      else if (PO = 'C' && CO == 'U') then
+        if (PO.lastModifiedAt < CO.lastModifiedAt)
+          //as update is same as create. Also we need to update the timeStamp with the most recent change
+          C + U = U
+          update(userId, contactName, 'C', CO.updatedAt); 
+        else if (PO.lastModifiedAt > CO.lastModifiedAt)
+           U + C = ( not possible )
+     ```
+Above steps will give you the gist of the algorithm implemented. Code will clear out all such use cases.
+We can go through the `doSync()` function in our `index.js` file.
+
+- Time plays a vital role in determining which change should be treated in what sequence! There might be a case where even though device `A` updated before device `B` could update, but device `A` was not connected to internet for a long time and during that time period, device `B` posted an update. Thus, now we have device `B` synced with our main server, but device `A` is not. Once internet resumes on device `A`, it attempts to sync data with our main server. And since our previous operation was done on device `A` instead of device `B`, while sync operation of `A` ins underway, we look at the timestamp on the main server and from the payload of device `A`. In this case, device `A` was first to make an update, but device `B` got its data synced before device `A` could sync with the main server! Thus, we then assume that device `A` update should be given first priority even though `B` has synced with main server. Thus, we apply the contention rules given above by making appropriate change in operation sequences using timestamps.
