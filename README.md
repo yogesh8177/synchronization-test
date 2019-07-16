@@ -167,4 +167,4 @@ In the test data section in `index.js`, the payload must contain the following f
 }
 ```
 
-> Note: `name` field is mandatory here as our contact name field is a primary key. Perhaps `contactName` looks like a great variable name convention.
+> Note: `name` field is mandatory here as our contact name field is a primary key. Perhaps `contactName` looks like a great variable name convention. We can add the data accordingly in our testData array in `index.js` file to test out different scenarios. Caution regarding update operation, we need to set `updatedAt` timestamp to simulate different scenarios. So in our code, to make `update` operation occur after `create` operation, I updated the date to be greater than create operation date.
