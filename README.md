@@ -103,11 +103,35 @@ And since our previous operation was done on device `A` instead of device `B`, w
 4. For case where there are not so many users, Object and arrays will help our cause. But when list gets big, it will need a good approach so as to make our search and update operations more efficient. Mostly the search operation can be improved by compromising some other paramenters like memory usage. Instead of using array of objects, we can use Map of Map. This will definitely increase our memory overhead, but will help in faster reads and corresponding updates.
 5. Utilizing name as primary key will create issues where there can be two different individuals with same name. Here our approach of choosing `name` as `Primary Key` will fail. Also if we intend to extend our features, and name acts as a foreign key in other models, then it will be a huge pain.
 
+# In memory data structures
+
+In memory data structures used to store our data:
+
+## masterRecord
+
+This data structure is of our centralized cloud server. Its format is as follows:
+
+```json
+   {
+     "userId-1": [
+        { "name": "contact name", "mobileNumber": 9090909090, "recentOperation": "C", "createdAt": "", "updatedAt": "" },
+        { "name": "contact name", "mobileNumber": 9090909091, "recentOperation": "U", "createdAt": "", "updatedAt": "" }
+     ],
+     "userId-2": [
+        { "name": "contact name", "mobileNumber": 9090909093, "recentOperation": "C", "createdAt": "", "updatedAt": "" },
+        { "name": "contact name", "mobileNumber": 9090909094, "recentOperation": "U", "createdAt": "", "updatedAt": "" }
+     ],  
+  }
+```
+
+Here above, we are storing `userId` as a primary key to differentiate between multiple users. So accessing a given user is constant time operation (hash) where as contact search for a given user is O(n) in our current implementation. By using appropriate data structures we can tradeoff different operation performances.
+
+
 # Test data
 
 In the test data section in `index.js`, the payload must contain the following fields for performing any of the below operations:
 
-1. CREATE: 
+1. CREATE payload: 
 
 ```json
 {
@@ -118,7 +142,7 @@ In the test data section in `index.js`, the payload must contain the following f
 }
 ```
 
-2. UPDATE:
+2. UPDATE payload:
 
 ```json
 {
@@ -131,7 +155,7 @@ In the test data section in `index.js`, the payload must contain the following f
 }
 ```
 
-3. DELETE: 
+3. DELETE payload: 
 
 ```json
 {
