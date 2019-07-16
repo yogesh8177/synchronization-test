@@ -102,3 +102,45 @@ And since our previous operation was done on device `A` instead of device `B`, w
 3. The code written takes into account multiple users having multiple devices. Each device periodically will sync data (Pull vs Push) based on the conditions and rules given above.
 4. For case where there are not so many users, Object and arrays will help our cause. But when list gets big, it will need a good approach so as to make our search and update operations more efficient. Mostly the search operation can be improved by compromising some other paramenters like memory usage. Instead of using array of objects, we can use Map of Map. This will definitely increase our memory overhead, but will help in faster reads and corresponding updates.
 5. Utilizing name as primary key will create issues where there can be two different individuals with same name. Here our approach of choosing `name` as `Primary Key` will fail. Also if we intend to extend our features, and name acts as a foreign key in other models, then it will be a huge pain.
+
+# Test data
+
+In the test data section in `index.js`, the payload must contain the following fields for performing any of the below operations:
+
+1. CREATE: 
+
+```json
+{
+    "userId": 1,
+    "name": "John Cena",
+    "mobileNumber": 9090909090,
+    "operation": "C"
+}
+```
+
+2. UPDATE:
+
+```json
+{
+    "userId": 1,
+    "name": "John Cena",
+    "newName": "John Cenaa",
+    "mobileNumber": 9090909091,
+    "operation": "U",
+    "updatedAt": "last-modified-date"
+}
+```
+
+3. DELETE: 
+
+```json
+{
+    "userId": 1,
+    "name": "John Cenaa",
+    "mobileNumber": 9090909091,
+    "operation": "D",
+    "updatedAt": "deletion-date"
+}
+```
+
+> Note: `name` field is mandatory here as our contact name field is a primary key. Perhaps `contactName` looks like a great variable name convention.
