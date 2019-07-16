@@ -124,7 +124,7 @@ This data structure is of our centralized cloud server. Its format is as follows
   }
 ```
 
-Here above, we are storing `userId` as a primary key to differentiate between multiple users. So accessing a given user is constant time operation (hash) where as contact search for a given user is O(n) in our current implementation. By using appropriate data structures we can tradeoff different operation performances.
+Here above, we are storing `userId` as a primary key to differentiate between multiple users. So accessing a given user is `constant time` operation (hash) where as contact search for a given user is `O(n)` in our current implementation. By using appropriate data structures we can tradeoff different operation performances.
 
 
 # Test data
